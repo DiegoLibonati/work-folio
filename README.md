@@ -1,4 +1,4 @@
-# Tabs React
+# WorkFolio
 
 ## Educational Purpose
 
@@ -17,7 +17,13 @@ The application will open automatically at `http://localhost:3000`
 
 ## Description
 
-I made a application page that through different tabs you can get different information. Also if you tab with your keyboard you can access the different tabs and not only with the mouse click.
+**WorkFolio** is a single-page React application that displays a professional work experience timeline through an interactive tabbed interface. Each tab represents a different company the user has worked at, and clicking a tab reveals a detailed panel with the job title, employment dates, and a list of responsibilities and achievements for that role.
+
+The application fetches job data from an external API on load, shows a loading spinner while the request is in flight, and then renders the full experience list once the data is ready. The first company is selected by default, so users immediately see content without any extra interaction.
+
+Navigation is fully accessible: tabs follow the WAI-ARIA `tablist`/`tab`/`tabpanel` pattern, meaning keyboard users can move between companies using the Tab key without needing a mouse. Every interactive element has a descriptive `aria-label` so screen readers can announce the context clearly.
+
+The project is built with React 19 and TypeScript in strict mode, bundled with Vite, and covered by a Jest + React Testing Library test suite that verifies rendering, user interactions, API integration, and accessibility attributes.
 
 ## Technologies used
 
@@ -68,11 +74,7 @@ I made a application page that through different tabs you can get different info
 
 ## Portfolio Link
 
-[`https://www.diegolibonati.com.ar/#/project/Tabs-React`](https://www.diegolibonati.com.ar/#/project/Tabs-React)
-
-## Video
-
-https://user-images.githubusercontent.com/99032604/198900660-1838aa62-23fd-4111-bfaf-a4a3ee9e26c2.mp4
+[`https://www.diegolibonati.com.ar/#/project/work-folio`](https://www.diegolibonati.com.ar/#/project/work-folio)
 
 ## Testing
 

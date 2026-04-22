@@ -1,89 +1,66 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import type { RenderResult } from "@testing-library/react";
 import type { ButtonExpProps } from "@/types/props";
 
 import ButtonExp from "@/components/ButtonExp/ButtonExp";
 
-interface RenderComponent {
-  container: HTMLElement;
-  props: ButtonExpProps;
-}
-
-const mockHandleActiveCompany = jest.fn();
-
-const renderComponent = (overrides?: Partial<ButtonExpProps>): RenderComponent => {
-  const props: ButtonExpProps = {
+const renderComponent = (props: Partial<ButtonExpProps> = {}): RenderResult => {
+  const defaultProps: ButtonExpProps = {
     company: "TOMMY",
     isActive: false,
-    handleActiveCompany: mockHandleActiveCompany,
-    ...overrides,
+    handleActiveCompany: jest.fn(),
+    ...props,
   };
-
-  const { container } = render(<ButtonExp {...props} />);
-
-  return { container, props };
+  return render(<ButtonExp {...defaultProps} />);
 };
 
 describe("ButtonExp", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  describe("rendering", () => {
+    it("should render the company name", () => {
+      renderComponent({ company: "TOMMY" });
+      expect(screen.getByText("TOMMY")).toBeInTheDocument();
+    });
+
+    it("should render with tab role", () => {
+      renderComponent();
+      expect(screen.getByRole("tab")).toBeInTheDocument();
+    });
+
+    it("should have aria-label with the company name", () => {
+      renderComponent({ company: "BIGDROP" });
+      expect(screen.getByRole("tab")).toHaveAttribute("aria-label", "View BIGDROP experience");
+    });
+
+    it("should have aria-selected false when not active", () => {
+      renderComponent({ isActive: false });
+      expect(screen.getByRole("tab")).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("should have aria-selected true when active", () => {
+      renderComponent({ isActive: true });
+      expect(screen.getByRole("tab")).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("should apply active class when isActive is true", () => {
+      renderComponent({ isActive: true });
+      expect(screen.getByRole("tab")).toHaveClass("button-exp--active");
+    });
+
+    it("should not apply active class when isActive is false", () => {
+      renderComponent({ isActive: false });
+      expect(screen.getByRole("tab")).not.toHaveClass("button-exp--active");
+    });
   });
 
-  it("should render an element with role tab", () => {
-    renderComponent();
-    expect(screen.getByRole("tab")).toBeInTheDocument();
-  });
-
-  it("should render the company name as text content", () => {
-    renderComponent({ company: "BIGDROP" });
-    expect(screen.getByRole("tab")).toHaveTextContent("BIGDROP");
-  });
-
-  it("should have the correct aria-label with company name", () => {
-    renderComponent({ company: "TOMMY" });
-    expect(screen.getByRole("tab", { name: "View TOMMY experience" })).toBeInTheDocument();
-  });
-
-  it("should have aria-selected false when not active", () => {
-    renderComponent({ isActive: false });
-    expect(screen.getByRole("tab")).toHaveAttribute("aria-selected", "false");
-  });
-
-  it("should have aria-selected true when active", () => {
-    renderComponent({ isActive: true });
-    expect(screen.getByRole("tab")).toHaveAttribute("aria-selected", "true");
-  });
-
-  it("should apply the button-exp class", () => {
-    renderComponent();
-    expect(screen.getByRole("tab")).toHaveClass("button-exp");
-  });
-
-  it("should apply button-exp--active class when isActive is true", () => {
-    renderComponent({ isActive: true });
-    expect(screen.getByRole("tab")).toHaveClass("button-exp--active");
-  });
-
-  it("should not apply button-exp--active class when isActive is false", () => {
-    renderComponent({ isActive: false });
-    expect(screen.getByRole("tab")).not.toHaveClass("button-exp--active");
-  });
-
-  it("should call handleActiveCompany when clicked", async () => {
-    const mockHandleActiveCompany = jest.fn();
-    const user = userEvent.setup();
-
-    renderComponent({ handleActiveCompany: mockHandleActiveCompany });
-
-    await user.click(screen.getByRole("tab"));
-
-    expect(mockHandleActiveCompany).toHaveBeenCalledTimes(1);
-  });
-
-  it("should not call handleActiveCompany when not clicked", () => {
-    const mockHandleActiveCompany = jest.fn();
-    renderComponent({ handleActiveCompany: mockHandleActiveCompany });
-    expect(mockHandleActiveCompany).not.toHaveBeenCalled();
+  describe("behavior", () => {
+    it("should call handleActiveCompany when clicked", async () => {
+      const mockHandleActiveCompany = jest.fn();
+      renderComponent({ handleActiveCompany: mockHandleActiveCompany });
+      const user = userEvent.setup();
+      await user.click(screen.getByRole("tab"));
+      expect(mockHandleActiveCompany).toHaveBeenCalledTimes(1);
+    });
   });
 });

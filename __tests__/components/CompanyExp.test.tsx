@@ -1,72 +1,79 @@
 import { render, screen } from "@testing-library/react";
 
+import type { RenderResult } from "@testing-library/react";
 import type { CompanyExpProps } from "@/types/props";
 
 import CompanyExp from "@/components/CompanyExp/CompanyExp";
 
-import { mockTab } from "@tests/__mocks__/tabs.mock";
-
-interface RenderComponent {
-  container: HTMLElement;
-  props: CompanyExpProps;
-}
-
-const renderComponent = (overrides?: Partial<CompanyExpProps>): RenderComponent => {
-  const props: CompanyExpProps = {
-    company: mockTab.company,
-    title: mockTab.title,
-    dates: mockTab.dates,
-    duties: mockTab.duties,
-    ...overrides,
+const renderComponent = (props: Partial<CompanyExpProps> = {}): RenderResult => {
+  const defaultProps: CompanyExpProps = {
+    company: "TOMMY",
+    title: "Full Stack Web Developer",
+    dates: "December 2015 - Present",
+    duties: ["Duty one", "Duty two"],
+    ...props,
   };
-
-  const { container } = render(<CompanyExp {...props} />);
-
-  return { container, props };
+  return render(<CompanyExp {...defaultProps} />);
 };
 
 describe("CompanyExp", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  describe("rendering", () => {
+    it("should render with tabpanel role", () => {
+      renderComponent();
+      expect(screen.getByRole("tabpanel")).toBeInTheDocument();
+    });
 
-  it("should render with role tabpanel", () => {
-    renderComponent();
-    expect(screen.getByRole("tabpanel")).toBeInTheDocument();
-  });
+    it("should render the title", () => {
+      renderComponent({ title: "Full Stack Web Developer" });
+      expect(
+        screen.getByRole("heading", { level: 2, name: "Full Stack Web Developer" })
+      ).toBeInTheDocument();
+    });
 
-  it("should have an aria-label containing the company name", () => {
-    renderComponent({ company: "TOMMY" });
-    expect(screen.getByRole("tabpanel", { name: /TOMMY/i })).toBeInTheDocument();
-  });
+    it("should render the company name", () => {
+      renderComponent({ company: "TOMMY" });
+      expect(screen.getByRole("heading", { level: 3, name: "TOMMY" })).toBeInTheDocument();
+    });
 
-  it("should render the job title in an h2", () => {
-    renderComponent({ title: "Full Stack Web Developer" });
-    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Full Stack Web Developer");
-  });
+    it("should render the dates", () => {
+      renderComponent({ dates: "December 2015 - Present" });
+      expect(
+        screen.getByRole("heading", { level: 4, name: "December 2015 - Present" })
+      ).toBeInTheDocument();
+    });
 
-  it("should render the company name in an h3", () => {
-    renderComponent({ company: "TOMMY" });
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("TOMMY");
-  });
+    it("should render all duty items", () => {
+      const duties = ["Duty one", "Duty two", "Duty three"];
+      renderComponent({ duties });
+      duties.forEach((duty) => {
+        expect(screen.getByText(duty)).toBeInTheDocument();
+      });
+    });
 
-  it("should render the dates in an h4", () => {
-    renderComponent({ dates: "December 2015 - Present" });
-    expect(screen.getByRole("heading", { level: 4 })).toHaveTextContent("December 2015 - Present");
-  });
+    it("should render the correct number of duty items", () => {
+      renderComponent({ duties: ["Duty one", "Duty two"] });
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    });
 
-  it("should render a list item for each duty", () => {
-    renderComponent({ duties: mockTab.duties });
-    expect(screen.getAllByRole("listitem")).toHaveLength(mockTab.duties.length);
-  });
+    it("should render empty list when duties is empty", () => {
+      renderComponent({ duties: [] });
+      expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+    });
 
-  it("should render the duties list with an aria-label containing the company name", () => {
-    renderComponent({ company: "TOMMY" });
-    expect(screen.getByRole("list", { name: /TOMMY/i })).toBeInTheDocument();
-  });
+    it("should have correct aria-label with company name", () => {
+      renderComponent({ company: "TOMMY" });
+      expect(screen.getByRole("tabpanel")).toHaveAttribute(
+        "aria-label",
+        "TOMMY work experience details"
+      );
+    });
 
-  it("should render no list items when duties is empty", () => {
-    renderComponent({ duties: [] });
-    expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+    it("should have fallback aria-label when company is empty string", () => {
+      renderComponent({ company: "" });
+      expect(screen.getByRole("tabpanel")).toHaveAttribute(
+        "aria-label",
+        "Selected company work experience details"
+      );
+    });
   });
 });

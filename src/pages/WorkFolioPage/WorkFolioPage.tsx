@@ -9,9 +9,9 @@ import CompanyExp from "@/components/CompanyExp/CompanyExp";
 
 import tabService from "@/services/tabService";
 
-import "@/pages/TabsPage/TabsPage.css";
+import "@/pages/WorkFolioPage/WorkFolioPage.css";
 
-const TabsPage = (): JSX.Element => {
+const WorkFolioPage = (): JSX.Element => {
   const [jobState, setJobState] = useState<JobState>({
     jobs: [],
     loading: false,
@@ -82,4 +82,4 @@ const TabsPage = (): JSX.Element => {
   );
 };
 
-export default TabsPage;
+export default WorkFolioPage;

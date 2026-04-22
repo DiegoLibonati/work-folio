@@ -1,7 +1,7 @@
 {
-  "name": "Tabs React",
-  "short_name": "Tabs",
-  "description": "I made a application page that through different tabs you can get different information. Also if you tab with your keyboard you can access the different tabs and not only with the mouse click.",
+  "name": "WorkFolio",
+  "short_name": "WorkFolio",
+  "description": "WorkFolio is a single-page React application that displays a professional work experience timeline through an interactive tabbed interface. Each tab represents a different company the user has worked at, and clicking a tab reveals a detailed panel with the job title, employment dates, and a list of responsibilities and achievements for that role.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

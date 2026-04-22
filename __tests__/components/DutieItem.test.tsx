@@ -1,52 +1,44 @@
 import { render, screen } from "@testing-library/react";
 
+import type { RenderResult } from "@testing-library/react";
 import type { DutieItemProps } from "@/types/props";
 
 import DutieItem from "@/components/DutieItem/DutieItem";
 
-interface RenderComponent {
-  container: HTMLElement;
-  props: DutieItemProps;
-}
-
-const renderComponent = (overrides?: Partial<DutieItemProps>): RenderComponent => {
-  const props: DutieItemProps = {
-    dutie: "Built a React application",
-    ...overrides,
+const renderComponent = (props: Partial<DutieItemProps> = {}): RenderResult => {
+  const defaultProps: DutieItemProps = {
+    dutie: "Default duty text",
+    ...props,
   };
-
-  const { container } = render(
+  return render(
     <ul>
-      <DutieItem {...props} />
+      <DutieItem {...defaultProps} />
     </ul>
   );
-
-  return { container, props };
 };
 
 describe("DutieItem", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  describe("rendering", () => {
+    it("should render the duty text", () => {
+      renderComponent({ dutie: "Some duty text" });
+      expect(screen.getByText("Some duty text")).toBeInTheDocument();
+    });
 
-  it("should render a list item", () => {
-    renderComponent();
-    expect(screen.getByRole("listitem")).toBeInTheDocument();
-  });
+    it("should render as a list item", () => {
+      renderComponent();
+      expect(screen.getByRole("listitem")).toBeInTheDocument();
+    });
 
-  it("should render the dutie text", () => {
-    renderComponent({ dutie: "Built a React application" });
-    expect(screen.getByRole("listitem")).toHaveTextContent("Built a React application");
-  });
+    it("should render an icon with aria-hidden", () => {
+      const { container } = renderComponent();
+      const icon = container.querySelector("svg");
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+    });
 
-  it("should apply the dutie-item class to the list item", () => {
-    renderComponent();
-    expect(screen.getByRole("listitem")).toHaveClass("dutie-item");
-  });
-
-  it("should render the icon with aria-hidden true", () => {
-    const { container } = renderComponent();
-    const icon = container.querySelector<SVGElement>("svg");
-    expect(icon).toHaveAttribute("aria-hidden", "true");
+    it("should render different duty texts correctly", () => {
+      const duty = "Another specific duty";
+      renderComponent({ dutie: duty });
+      expect(screen.getByText(duty)).toBeInTheDocument();
+    });
   });
 });

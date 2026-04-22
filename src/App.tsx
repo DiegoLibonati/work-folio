@@ -1,9 +1,9 @@
 import type { JSX } from "react";
 
-import TabsPage from "@/pages/TabsPage/TabsPage";
+import WorkFolioPage from "@/pages/WorkFolioPage/WorkFolioPage";
 
 function App(): JSX.Element {
-  return <TabsPage></TabsPage>;
+  return <WorkFolioPage></WorkFolioPage>;
 }
 
 export default App;
