@@ -31,7 +31,7 @@ describe("DutieItem", () => {
 
     it("should render an icon with aria-hidden", () => {
       const { container } = renderComponent();
-      const icon = container.querySelector("svg");
+      const icon = container.querySelector<SVGElement>("svg");
       expect(icon).toHaveAttribute("aria-hidden", "true");
     });
 
