@@ -1,4 +1,4 @@
-# WorkFolio
+# Work Folio
 
 ## Educational Purpose
 
@@ -17,7 +17,7 @@ The application will open automatically at `http://localhost:3000`
 
 ## Description
 
-**WorkFolio** is a single-page React application that displays a professional work experience timeline through an interactive tabbed interface. Each tab represents a different company the user has worked at, and clicking a tab reveals a detailed panel with the job title, employment dates, and a list of responsibilities and achievements for that role.
+**Work Folio** is a single-page React application that displays a professional work experience timeline through an interactive tabbed interface. Each tab represents a different company the user has worked at, and clicking a tab reveals a detailed panel with the job title, employment dates, and a list of responsibilities and achievements for that role.
 
 The application fetches job data from an external API on load, shows a loading spinner while the request is in flight, and then renders the full experience list once the data is ready. The first company is selected by default, so users immediately see content without any extra interaction.
 
