@@ -5,7 +5,7 @@ import { mockTabs } from "@tests/__mocks__/tabs.mock";
 const mockFetchSuccess = (data: unknown): void => {
   global.fetch = jest.fn().mockResolvedValue({
     ok: true,
-    json: () => data,
+    json: async () => await data,
   } as Response);
 };
 
