@@ -6,15 +6,6 @@ This project was created primarily for **educational and learning purposes**.
 While it is well-structured and could technically be used in production, it is **not intended for commercialization**.  
 The main goal is to explore and demonstrate best practices, patterns, and technologies in software development.
 
-## Getting Started
-
-1. Clone the repository
-2. Navigate to the project folder
-3. Execute: `npm install`
-4. Execute: `npm run dev`
-
-The application will open automatically at `http://localhost:3000`
-
 ## Description
 
 **Work Folio** is a single-page React application that displays a professional work experience timeline through an interactive tabbed interface. Each tab represents a different company the user has worked at, and clicking a tab reveals a detailed panel with the job title, employment dates, and a list of responsibilities and achievements for that role.
@@ -34,6 +25,8 @@ The project is built with React 19 and TypeScript in strict mode, bundled with V
 5. CSS3
 
 ## Libraries used
+
+The stack above is wired together through the following packages, split into runtime and development dependencies.
 
 #### Dependencies
 
@@ -73,11 +66,21 @@ The project is built with React 19 and TypeScript in strict mode, bundled with V
 "vite": "^7.1.6"
 ```
 
-## Portfolio Link
+## Getting Started
 
-[`https://www.diegolibonati.com.ar/#/project/work-folio`](https://www.diegolibonati.com.ar/#/project/work-folio)
+With the stack in mind, follow these steps to run the project locally:
+
+1. Clone the repository
+2. Navigate to the project folder
+3. Copy `.env.example` to `.env` and adjust the `VITE_API_URL` value if needed (it sets the proxy target for `/react-tabs-project` requests)
+4. Execute: `npm install`
+5. Execute: `npm run dev`
+
+The application will open automatically at `http://localhost:3000`.
 
 ## Testing
+
+Once the app runs locally, you can verify it with the Jest + React Testing Library suite, which exercises rendering, user interactions, API integration, and accessibility attributes.
 
 1. Navigate to the project folder
 2. Execute: `npm test`
@@ -88,7 +91,9 @@ For coverage report:
 npm run test:coverage
 ```
 
-## Security
+## Security Audit
+
+Beyond functional testing, the project ships with tooling to inspect dependencies and overall project health.
 
 ### npm audit
 
@@ -115,3 +120,7 @@ npm run doctor -- --verbose
 ## Known Issues
 
 None at the moment.
+
+## Portfolio Link
+
+[`https://www.diegolibonati.com.ar/#/project/work-folio`](https://www.diegolibonati.com.ar/#/project/work-folio)
