@@ -59,10 +59,12 @@ The stack above is wired together through the following packages, split into run
 "jest": "^30.3.0"
 "jest-environment-jsdom": "^30.3.0"
 "lint-staged": "^15.0.0"
+"msw": "2.10.4"
 "prettier": "^3.0.0"
 "ts-jest": "^29.4.6"
 "typescript": "^5.2.2"
 "typescript-eslint": "^8.0.0"
+"undici": "^7.25.0"
 "vite": "^7.1.6"
 ```
 
@@ -89,6 +91,51 @@ For coverage report:
 
 ```bash
 npm run test:coverage
+```
+
+## Continuous Integration
+
+The repository ships with a **GitHub Actions** pipeline defined in [`.github/workflows/ci.yml`](.github/workflows/ci.yml). It runs automatically on every `push` and `pull_request` targeting the `main` branch.
+
+### Pipeline overview
+
+```
+                    ┌─── PR or push to main ───┐
+                    ▼                          ▼
+┌──────────────────────┐  ┌──────────────────┐  ┌──────────────────────┐
+│    lint-and-audit    │─▶│      testing      │─▶│        build         │
+│ eslint · type-check  │  │       jest        │  │  tsc + vite build    │
+└──────────────────────┘  └──────────────────┘  └──────────────────────┘
+```
+
+### Validation jobs (run on every PR and push)
+
+1. **`lint-and-audit`** — runs `npm run lint` (ESLint on `src/`) and `npm run type-check` (`tsc -p tsconfig.app.json --noEmit`).
+2. **`testing`** — runs `npm run test` (Jest + React Testing Library, with MSW intercepting HTTP at the network layer).
+3. **`build`** — runs `npm run build` (TypeScript compile + Vite production bundle) as a smoke test that the app builds successfully.
+
+Every job checks out the repo, sets up Node using the version pinned in [`.nvmrc`](.nvmrc), restores the npm cache, and installs dependencies with `npm ci`. `testing` is gated on `lint-and-audit` and `build` is gated on `testing`, so the pipeline fails fast.
+
+### Where the build outputs live
+
+| Output                      | Location                                                      |
+| --------------------------- | ------------------------------------------------------------- |
+| Lint, type-check, test logs | **Actions** tab on GitHub                                     |
+| Production bundle (`dist/`) | Ephemeral, inside the runner                                  |
+| Coverage report             | Generated locally via `npm run test:coverage` (not published) |
+
+### Running the same checks locally
+
+```bash
+# lint-and-audit
+npm run lint
+npm run type-check
+
+# testing
+npm run test
+
+# build
+npm run build
 ```
 
 ## Security Audit
